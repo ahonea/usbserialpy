@@ -8,21 +8,24 @@ import sys
 import serial
 from time import gmtime, strftime
 import glob
+import logging
+import logging.handlers
 
 """
-Log file is created and filename is "serial-monthdayhourmin"
+Log file is created 
 """
+
 class mrLogger:
 
   def __init__(self, source):
-    self.file_handle = open('serial-' + strftime("%m%d%Y%H%M", gmtime()), 'a')
+    self.file_handle = open('serial-log.txt', 'a')
     self.source=source
     self.buf = []
 
   def write(self, data):
     self.buf.append(data)
     if data.endswith('\n'):
-      self.file_handle = open('serial-' + strftime("%m%d%Y%H%M", gmtime()),  'a')
+      self.file_handle = open('serial-log.txt',  'a')
       self.file_handle.write('\t')
       self.file_handle.write(self.source + "|| " + ''.join(self.buf))
       self.file_handle.close()
@@ -30,10 +33,12 @@ class mrLogger:
 
   def __del__(self):
     if self.buf != []:
-      self.file_handle = open('serial-' + strftime("%m%d%Y%H%M", gmtime()), 'a')
+      self.file_handle = open('serial-log.txt', 'a')
       self.file_handle.write('\t')
       self.file_handle.write(self.source + "|| " + ''.join(self.buf) + '\n')
       self.file_handle.close()      
+
+
 """
 The contents of the logfile is INFO for all standard output and ERROR for any errors such 
 as terminating the script with ctl-c
@@ -65,7 +70,9 @@ print ('You are now connected to your serial Device')
 while(1):
 	if s.isOpen():			
 		look = s.readline()
-		print look
+		print look 
+		
+		
 
 
 				
